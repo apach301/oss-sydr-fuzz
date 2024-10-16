@@ -1,0 +1,23 @@
+ENV vars for fuzzolic:
+
+export C_INCLUDE_PATH=/fuzzolic/solver/fuzzy-sat/fuzzolic-z3/build/dist/include
+export LIBRARY_PATH=/fuzzolic/solver/fuzzy-sat/fuzzolic-z3/build/dist/lib
+export LD_LIBRARY_PATH=/fuzzolic/solver/fuzzy-sat/fuzzolic-z3/build/dist/lib
+export AFL_PATH=/usr/local/bin
+export AFL_SKIP_CPUFREQ=1
+export AFL_NO_UI=1
+
+1. Run Fuzzolic standalone on single path
+
+/fuzzolic/fuzzolic/fuzzolic.py -f -l -o output_fuzzolic -i /corpus/crayons.icc --single-path -k -- /lcms_sydr/cms_overwrite_transform_sydr @@
+
+2. Run Fuzzolic repeatedly on self-generated inputs (-i could be a single file or a corpus):
+/fuzzolic/fuzzolic/fuzzolic.py -f -l -o output_fuzzolic -i /corpus/crayons.icc -k -- /lcms_sydr/cms_overwrite_transform_sydr @@
+
+3. Run Fuzzolic with AFL++ for hybrid fuzzing.
+   By default script launches AFL master and slave in Qemu mode on Fuzzolic target, with CmpLog auto enabled (-c 0).
+   To use AFL-instrumented target it should be placed near Fuzzolic target with _afl suffix. That target also expected to be a CmpLog.
+/fuzzolic/fuzzolic/run_afl_fuzzolic.py -f -l -o output_fuzzolic -i /corpus -- /lcms_sydr/cms_overwrite_transform_sydr @@
+
+4. Manually launch Fuzzolic with AFL++: -a set path to directory of afl instance to pick next inputs, -o should be in afl common output directory.
+/fuzzolic/fuzzolic/fuzzolic.py -f -l -a output_fuzzolic/afl-slave -i output_fuzzolic/afl-slave/queue/ -o output_fuzzolic/fuzzolic -- /lcms_sydr/cms_overwrite_transform_sydr @@

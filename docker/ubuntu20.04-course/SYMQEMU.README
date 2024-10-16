@@ -1,0 +1,6 @@
+1. Launch SymQEMU in standalone mode. SymQEMU works only with symbolic stdin.
+mkdir output-dir
+SYMCC_OUTPUT_DIR=output-dir symqemu-x86_64 /lcms_sydr/cms_overwrite_transform_sydr_stdin </corpus/Rec709.icc
+
+2. Launch symcc_fuzzing_helper to run hybrid fuzzing:
+
